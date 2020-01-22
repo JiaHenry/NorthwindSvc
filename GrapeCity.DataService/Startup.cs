@@ -37,15 +37,20 @@ namespace GrapeCity.DataService
             services.AddOData();
         }
 
+
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+#pragma warning disable CA1822 // Mark members as static
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+#pragma warning restore CA1822 // Mark members as static
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+#pragma warning disable CA1062 // Validate arguments of public methods
             var builder = new ODataConventionModelBuilder(app.ApplicationServices);
+#pragma warning restore CA1062 // Validate arguments of public methods
             builder.EntitySet<Category>("Categories");
             builder.EntitySet<Customer>("Customers");
             builder.EntitySet<Product>("Products");
