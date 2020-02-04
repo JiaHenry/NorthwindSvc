@@ -63,7 +63,7 @@ namespace GrapeCity.DataService
             builder.EntitySet<Supplier>("Suppliers");
             builder.EntitySet<Region>("Regions");
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseMvc(routeBuilder =>
             {
                 routeBuilder.EnableDependencyInjection();
