@@ -1,4 +1,5 @@
 using GrapeCity.DataService.Models;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using static Microsoft.OData.ODataUrlKeyDelimiter;
 
 namespace GrapeCity.DataService
 {
@@ -34,34 +36,26 @@ namespace GrapeCity.DataService
                 options
                 .UseLazyLoadingProxies()
                 .UseSqlServer(Configuration.GetConnectionString("NorthwindContext")));
-            services.AddOData();
+
+            services.AddApiVersioning(
+                options =>
+                {
+                    // reporting api versions will return the headers "api-supported-versions" and "api-deprecated-versions"
+                    options.ReportApiVersions = true;
+                });
+            services.AddOData().EnableApiVersioning();
         }
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 #pragma warning disable CA1822 // Mark members as static
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, VersionedODataModelBuilder modelBuilder)
 #pragma warning restore CA1822 // Mark members as static
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
-
-#pragma warning disable CA1062 // Validate arguments of public methods
-            var builder = new ODataConventionModelBuilder(app.ApplicationServices);
-#pragma warning restore CA1062 // Validate arguments of public methods
-            builder.EntitySet<Category>("Categories");
-            builder.EntitySet<Customer>("Customers");
-            builder.EntitySet<Product>("Products");
-            builder.EntitySet<Employee>("Employees");
-            builder.EntitySet<Order>("Orders");
-            builder.EntitySet<Territory>("Territories");
-            builder.EntityType<OrderDetail>().HasKey(t => new { t.OrderId, t.ProductId });
-            builder.EntitySet<OrderDetail>("OrderDetails");
-            builder.EntitySet<Shipper>("Shippers");
-            builder.EntitySet<Supplier>("Suppliers");
-            builder.EntitySet<Region>("Regions");
 
             // app.UseHttpsRedirection();
             app.UseMvc(routeBuilder =>
@@ -71,7 +65,15 @@ namespace GrapeCity.DataService
                 // and this line to enable OData query option, for example $filter
                 routeBuilder.Select().Expand().Filter().OrderBy().MaxTop(100).Count();
 
-                routeBuilder.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
+                var models = modelBuilder.GetEdmModels();
+
+                // routeBuilder.MapODataServiceRoute("ODataRoute", "odata", builder.GetEdmModel());
+                // the following will not work as expected
+                // BUG: https://github.com/OData/WebApi/issues/1837
+                // routeBuilder.SetDefaultODataOptions( new ODataOptions() { UrlKeyDelimiter = Parentheses } );
+                routeBuilder.ServiceProvider.GetRequiredService<ODataOptions>().UrlKeyDelimiter = Parentheses;
+                routeBuilder.MapVersionedODataRoutes("ODataRoute", "odata/northwind", models);
+                routeBuilder.MapVersionedODataRoutes("odata-bypath", "odata/northwind/v{version:apiVersion}", models);
             });
         }
     }

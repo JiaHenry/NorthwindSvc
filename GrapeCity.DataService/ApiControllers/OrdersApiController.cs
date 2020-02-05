@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GrapeCity.DataService.ApiControllers
 {
-    [Route("api/Orders")]
+    [ApiVersion("1.0")]
+    [Route("api/northwind/v{version:apiVersion}/Orders")]
     [ApiController]
     public class OrdersApiController : ControllerBase
     {

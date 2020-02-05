@@ -10,7 +10,8 @@ using GrapeCity.DataService.DTO;
 
 namespace GrapeCity.DataService.ApiControllers
 {
-    [Route("api/Shippers")]
+    [ApiVersion("1.0")]
+    [Route("api/northwind/v{version:apiVersion}/Shippers")]
     [ApiController]
     public class ShippersApiController : ControllerBase
     {

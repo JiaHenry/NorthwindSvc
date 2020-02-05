@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace GrapeCity.DataService.ApiControllers
 {
-    [Route("api/Categories")]
+    [ApiVersion("1.0")]
+    // [ApiVersion("2.0")]  Version demo and check usage
+    [Route("api/northwind/v{version:apiVersion}/Categories")]
     [ApiController]
     public class CategoriesApiController : ControllerBase
     {
@@ -56,5 +58,21 @@ namespace GrapeCity.DataService.ApiControllers
                 .SelectMany(c => c.Products)
                 .Select(DtoConverter.AsProductDto);
         }
+
+        #region Version demo and check usage
+        //[MapToApiVersion("2.0")]
+        //[HttpGet("{id}/Message")]
+        //public async Task<ActionResult<string>> GetMessage(int id, ApiVersion apiVersion) 
+        //{
+        //    var category = await _context.Categories.FindAsync(id);
+
+        //    if (category == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return  Ok("Name: " + category.CategoryName + ", Version: " + apiVersion??ToString());
+        //}
+        #endregion
     }
 }

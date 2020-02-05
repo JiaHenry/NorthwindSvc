@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace GrapeCity.DataService.GraphQL
 {
-    [Route("graphql")]
+    [ApiVersionNeutral]
+    [Route("northwind/graphql")]
     [ApiController]
     public class GraphQLController : ControllerBase
     {

@@ -1,9 +1,11 @@
 ﻿using GrapeCity.DataService.Models;
 using Microsoft.AspNet.OData;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace GrapeCity.DataService.Controllers
 {
+    [ApiVersion("1.0")]
     public class SuppliersController : ODataController
     {
         private readonly NorthwindContext _context;

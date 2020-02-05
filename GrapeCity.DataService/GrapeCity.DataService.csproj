@@ -16,6 +16,7 @@
     <PackageReference Include="GraphQL" Version="2.4.0" />  <!-- GraphQL.Net -->
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Xml" Version="2.2.0" /> <!-- for support response in XML format -->
     <PackageReference Include="Microsoft.AspNetCore.OData" Version="7.3.0" /> <!-- support OData v4 -->
+    <PackageReference Include="Microsoft.AspNetCore.OData.Versioning" Version="4.1.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">  <!-- code analyze -->
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
