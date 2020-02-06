@@ -8,7 +8,8 @@ namespace GrapeCity.DataService.ApiControllers
 {
     [ApiVersion("1.0")]
     // [ApiVersion("2.0")]  Version demo and check usage
-    [Route("api/northwind/v{version:apiVersion}/Categories")]
+    [Route("northwind/api/Categories")]
+    [Route("northwind/api/v{version:apiVersion}/Categories")]
     [ApiController]
     public class CategoriesApiController : ControllerBase
     {

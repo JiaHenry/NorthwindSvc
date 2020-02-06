@@ -4,6 +4,7 @@ using Microsoft.AspNet.OData.Builder;
 using Microsoft.AspNet.OData.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -42,6 +43,8 @@ namespace GrapeCity.DataService
                 {
                     // reporting api versions will return the headers "api-supported-versions" and "api-deprecated-versions"
                     options.ReportApiVersions = true;
+                    options.DefaultApiVersion = new ApiVersion(1, 0);
+                    options.AssumeDefaultVersionWhenUnspecified = true;
                 });
             services.AddOData().EnableApiVersioning();
         }
@@ -72,8 +75,8 @@ namespace GrapeCity.DataService
                 // BUG: https://github.com/OData/WebApi/issues/1837
                 // routeBuilder.SetDefaultODataOptions( new ODataOptions() { UrlKeyDelimiter = Parentheses } );
                 routeBuilder.ServiceProvider.GetRequiredService<ODataOptions>().UrlKeyDelimiter = Parentheses;
-                routeBuilder.MapVersionedODataRoutes("ODataRoute", "odata/northwind", models);
-                routeBuilder.MapVersionedODataRoutes("odata-bypath", "odata/northwind/v{version:apiVersion}", models);
+                routeBuilder.MapVersionedODataRoutes("ODataRoute", "northwind/odata", models);
+                routeBuilder.MapVersionedODataRoutes("odata-bypath", "northwind/odata/v{version:apiVersion}", models);
             });
         }
     }
